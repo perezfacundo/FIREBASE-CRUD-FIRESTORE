@@ -1,7 +1,13 @@
 // Import the functions you need from the SDKs you need
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,14 +23,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export const saveTask = async (title, description) => {
-    try {
-        const docRef = await addDoc(collection(db, 'tasks'), {
-            title: title,
-            description: description
-        })
-        console.log('Tarea guardada', docRef.id)
-    } catch (error) {
-        console.log('Error al guardar tarea', error)
-    }
-}
+export const saveTask = (title, description) => 
+    addDoc(collection(db, 'tasks'), { title, description })
+
+export const getTasks = () => getDocs(collection(db, 'tasks'))
+
+export const onGetTasks = (callback) => onSnapshot(collection(db, 'tasks'), callback)
